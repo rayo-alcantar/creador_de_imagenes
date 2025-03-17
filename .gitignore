@@ -6,7 +6,7 @@ ENV/
 # PyInstaller
 build/
 dist/
-*.spec
+
 
 # Python
 __pycache__/
