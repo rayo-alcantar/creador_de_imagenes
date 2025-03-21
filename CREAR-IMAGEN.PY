@@ -72,7 +72,7 @@ class HelpDialog(wx.Dialog):
 		
 		# Crear contenido
 		content = """
-Generador de Imágenes con Texto v1.0
+Generador de Imágenes con Texto v1.3
 -----------------------------------
 Esta aplicación te permite crear imágenes personalizadas con texto.
 Perfecta para hacer carteles, anuncios, memes o cualquier imagen
@@ -314,7 +314,13 @@ class MainFrame(wx.Frame):
 			line_heights.append(bbox[3] - bbox[1])
 		
 		image_width = max(line_widths) + padding * 2
-		image_height = sum(line_heights) + padding * 2
+		total_text_height = sum(line_heights)
+		image_height = total_text_height + padding * 2
+		
+		# Si el texto es corto, se establece una altura mínima y se centra verticalmente
+		min_height = 300  # altura mínima de la imagen
+		if image_height < min_height:
+			image_height = min_height
 		
 		# Crear imagen
 		img = Image.new('RGB', (image_width, image_height), color=bg_color)
@@ -324,8 +330,8 @@ class MainFrame(wx.Frame):
 		draw = ImageDraw.Draw(img)
 		text_color = self.get_text_color(bg_color, text_color)
 		
-		# Dibujar texto
-		y = padding
+		# Dibujar texto centrado verticalmente
+		y = (image_height - total_text_height) // 2
 		for line, lh in zip(lines, line_heights):
 			bbox = font.getbbox(line)
 			line_width = bbox[2] - bbox[0]
